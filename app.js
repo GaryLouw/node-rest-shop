@@ -6,15 +6,18 @@ const mongoose = require("mongoose");
 
 const productRoutes = require("./api/routes/products");
 const orderRoutes = require("./api/routes/orders");
+const userRoutes = require("./api/routes/user");
 
 mongoose.connect(
   "mongodb+srv://GaryLouw:" +
     process.env.MONGO__ATLAS_PW +
     "@node-rest-shop.nhknuzg.mongodb.net/?retryWrites=true&w=majority"
 );
+mongoose.Promise = global.Promise;
 
 //sets up middleware
 app.use(morgan("dev"));
+app.use('/uploads', express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -34,6 +37,7 @@ app.use((req, res, next) => {
 
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
+app.use("/user", userRoutes);
 
 //Handles errors anywhere on the page if no route is found
 app.use((req, res, next) => {
